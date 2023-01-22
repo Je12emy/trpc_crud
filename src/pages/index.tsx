@@ -1,8 +1,9 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { AppContainer } from "../components/AppContainer";
 import { Button } from "../components/Button";
+import { ConfirmationModal } from "../components/ConfirmationModal";
 import { CreatePatient } from "../components/CreatePatient";
 import { PatientDetails } from "../components/PatientDetails";
 import { Spinner } from "../components/Spinner";
@@ -24,6 +25,8 @@ const Home: NextPage = () => {
   const patients = api.patient.all.useQuery({ page: 0, limit: 10 });
   const [drawer, selectPatient, deselectPatient, openDrawer] =
     usePatientDrawer();
+  const [showConfirmationDialog, setShowConfirmationDialog] =
+    useState<boolean>(false);
 
   const HomeSidePanel: FC = () => {
     if (!drawer.shouldOpenDrawer) {
@@ -106,12 +109,12 @@ const Home: NextPage = () => {
                     >
                       Edit
                     </span>
-                    <a
-                      href="#"
+                    <span
+                      onClick={() => setShowConfirmationDialog(true)}
                       className="pl-6 text-blue-400 underline hover:text-blue-600"
                     >
                       Remove
-                    </a>
+                    </span>
                   </td>
                 </tr>
               </>
@@ -119,6 +122,10 @@ const Home: NextPage = () => {
           </tbody>
         </table>
         <HomeSidePanel />
+        <ConfirmationModal
+          message="Are you sure you wan't to delete this patient?"
+          handleConfirmation={() => {}}
+        />
         <div className="w-11/12">
           <Button onClick={openDrawer}> Add Patient </Button>
         </div>
