@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 import { AppContainer } from "../components/AppContainer";
 import { PatientDetails } from "../components/PatientDetails";
+import { Spinner } from "../components/Spinner";
 import { usePatientDrawer } from "../hooks/usePatientDrawer";
 
 import { api } from "../utils/api";
@@ -21,11 +22,7 @@ const Home: NextPage = () => {
   const [drawer, openDrawer, closeDrawer] = usePatientDrawer();
 
   if (patients.isLoading) {
-    return (
-      <AppContainer>
-        <p>Loading...</p>
-      </AppContainer>
-    );
+    return <Spinner />;
   }
 
   if (!patients.data) {
