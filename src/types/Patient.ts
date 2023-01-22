@@ -1,4 +1,3 @@
-import { z } from "zod";
 import type { RouterOutput } from "./Infer";
 
 export type Patient = NonNullable<RouterOutput["patient"]["byId"]>

@@ -5,7 +5,7 @@ type Props = {
 };
 
 export const SidePanel: FC<Props> = ({ children }) => (
-  <aside className="fixed inset-y-0 right-0 flex w-1/2 max-w-xs flex-col bg-white shadow">
+  <aside className="fixed bottom-0 flex w-screen flex-col bg-white shadow md:inset-y-0 md:right-0 md:w-1/2 md:max-w-xs">
     {children}
   </aside>
 );

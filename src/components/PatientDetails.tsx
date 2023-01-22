@@ -50,7 +50,7 @@ export const PatientDetails: FC<Props> = ({ id, onClose: handleClose }) => {
               </svg>
             </button>
           </div>
-          <div className="mx-4">
+          <div className="m-4">
             <PatientDetailsForm {...patient.data} />
           </div>
         </SidePanel>
