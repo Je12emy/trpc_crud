@@ -3,7 +3,8 @@ import { ButtonHTMLAttributes, DetailedHTMLProps, FC } from "react";
 import { z } from "zod";
 import { EditPatientDetailsSchema } from "./PatientDetailsForm";
 import { useForm } from "react-hook-form";
-import { BloodType, Patient } from "../types/Patient";
+import { BloodType } from "../types/Patient";
+import { BaseButtonStyles } from "./Button";
 
 export const TextField = () => {
   const { field, error } = useTsController<string>();
@@ -33,13 +34,7 @@ type SubmitButtonProps = DetailedHTMLProps<
 export const SubmitButton: FC<SubmitButtonProps> = ({ ...props }) => {
   const { formState } = useForm<z.infer<typeof EditPatientDetailsSchema>>();
 
-  return (
-    <button
-      type="submit"
-      className="inline-flex w-full items-center justify-center space-x-2 rounded-lg border-indigo-500 bg-indigo-600 py-3 font-medium text-white hover:bg-indigo-500 hover:shadow disabled:bg-gray-500"
-      {...props}
-    />
-  );
+  return <button type="submit" className={BaseButtonStyles} {...props} />;
 };
 
 export const Dropdown: FC<{ options: string[] }> = ({ options }) => {
@@ -53,7 +48,7 @@ export const Dropdown: FC<{ options: string[] }> = ({ options }) => {
         <select
           value={field.value ? field.value : "none"}
           onChange={(e) => field.onChange(e.target.value as BloodType)}
-          className="w-full bg-white rounded-lg border border-slate-200 py-3 px-3 hover:shadow focus:border-slate-500 focus:outline-none"
+          className="w-full rounded-lg border border-slate-200 bg-white py-3 px-3 hover:shadow focus:border-slate-500 focus:outline-none"
         >
           {!field.value && <option value="none">Please select...</option>}
           {options.map((e) => (

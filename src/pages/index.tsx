@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { AppContainer } from "../components/AppContainer";
+import { Button } from "../components/Button";
 import { PatientDetails } from "../components/PatientDetails";
 import { Spinner } from "../components/Spinner";
 import { usePatientDrawer } from "../hooks/usePatientDrawer";
@@ -105,6 +106,9 @@ const Home: NextPage = () => {
             onClose={closeDrawer}
           />
         )}
+        <div className="w-11/12">
+          <Button> Add Patient </Button>
+        </div>
       </AppContainer>
     </>
   );
