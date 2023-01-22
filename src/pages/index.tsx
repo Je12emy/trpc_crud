@@ -3,7 +3,6 @@ import Head from "next/head";
 import { FC } from "react";
 import { AppContainer } from "../components/AppContainer";
 import { Button } from "../components/Button";
-import { ConfirmationModal } from "../components/ConfirmationModal";
 import { CreatePatient } from "../components/CreatePatient";
 import { DeletePatient } from "../components/DeletePatient";
 import { PatientDetails } from "../components/PatientDetails";
@@ -134,11 +133,11 @@ const Home: NextPage = () => {
             ))}
           </tbody>
         </table>
-        <HomeSidePanel />
-        <DeleteModal />
         <div className="w-11/12">
           <Button onClick={openDrawer}> Add Patient </Button>
         </div>
+        <HomeSidePanel />
+        <DeleteModal />
       </AppContainer>
     </>
   );

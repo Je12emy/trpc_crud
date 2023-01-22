@@ -7,6 +7,8 @@ type Props = {
 };
 
 export const CreatePatient: FC<Props> = ({ onClose: handleClose }) => {
+  // TODO add create function
+  
   return (
     <>
       <SidePanelWithBackDrop title="Create Patient" onClose={handleClose}>

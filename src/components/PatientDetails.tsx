@@ -11,6 +11,7 @@ type Props = Pick<Patient, "id"> & {
 
 export const PatientDetails: FC<Props> = ({ id, onClose: handleClose }) => {
   const patient = api.patient.byId.useQuery({ id });
+  // TODO add update function
 
   if (patient.isLoading) {
     return (
