@@ -18,7 +18,7 @@ const PatientPageHeader = () => {
 
 const Home: NextPage = () => {
   const patients = api.patient.all.useQuery({ page: 0, limit: 10 });
-  const [openDrawer, setOpenDrawer] = useState<boolean>(true);
+  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
 
   if (patients.isLoading) {
     return (
@@ -84,12 +84,12 @@ const Home: NextPage = () => {
                     <span className="absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase lg:hidden">
                       Actions
                     </span>
-                    <a
-                      href="#"
+                    <span
+                      onClick={() => setOpenDrawer(true)}
                       className="text-blue-400 underline hover:text-blue-600"
                     >
                       Edit
-                    </a>
+                    </span>
                     <a
                       href="#"
                       className="pl-6 text-blue-400 underline hover:text-blue-600"
@@ -102,7 +102,9 @@ const Home: NextPage = () => {
             ))}
           </tbody>
         </table>
-        {openDrawer && <PatientDetails id={"1"} />}
+        {openDrawer && (
+          <PatientDetails id={"1"} onClose={() => setOpenDrawer(false)} />
+        )}
       </AppContainer>
     </>
   );
