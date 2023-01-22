@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { FC } from "react";
+import { FC, useState } from "react";
 
 import { api } from "../utils/api";
 
@@ -22,8 +22,34 @@ const AppContainer: FC<{ children: React.ReactNode }> = ({ children }) => {
   );
 };
 
+const PatientDetailsDrawer: FC<{ patientId: string }> = ({ patientId: id }) => {
+  const patient = api.patient.byId.useQuery({ id });
+
+  if (patient.isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (!patient.data) {
+    return <p>Patient not found</p>;
+  }
+
+  return (
+    <>
+      <div className="fixed inset-0 z-10 bg-gray-900 bg-opacity-50">
+        <aside className="fixed inset-y-0 right-0 flex w-1/2 max-w-xs flex-col bg-white shadow">
+          <h2 className="mt-4 text-center text-2xl font-bold">
+            Patient Details
+          </h2>
+          {patient.data.firstName}
+        </aside>
+      </div>
+    </>
+  );
+};
+
 const Home: NextPage = () => {
-  const patients = api.patient.patients.useQuery({ page: 0, limit: 10 });
+  const patients = api.patient.all.useQuery({ page: 0, limit: 10 });
+  const [openDrawer, setOpenDrawer] = useState<boolean>(true);
 
   if (patients.isLoading) {
     return (
@@ -107,6 +133,7 @@ const Home: NextPage = () => {
             ))}
           </tbody>
         </table>
+        {openDrawer && <PatientDetailsDrawer patientId={"1"} />}
       </AppContainer>
     </>
   );
