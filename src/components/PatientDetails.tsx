@@ -1,6 +1,7 @@
 import { FC } from "react";
 import { Patient } from "../types/Patient";
 import { api } from "../utils/api";
+import { PatientDetailsForm } from "./PatientDetailsForm";
 
 type Props = Pick<Patient, "id">;
 
@@ -22,10 +23,11 @@ export const PatientDetails: FC<Props> = ({ id }) => {
           <h2 className="mt-4 text-center text-2xl font-bold">
             Patient Details
           </h2>
-          {patient.data.firstName}
+          <div className="mx-4">
+            <PatientDetailsForm {...patient.data} />
+          </div>
         </aside>
       </div>
     </>
   );
 };
-
