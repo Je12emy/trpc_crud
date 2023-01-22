@@ -1,6 +1,7 @@
 import { type NextPage } from "next";
 import Head from "next/head";
 import { FC, useState } from "react";
+import { Patient } from "../types/Patient";
 
 import { api } from "../utils/api";
 
@@ -22,7 +23,9 @@ const AppContainer: FC<{ children: React.ReactNode }> = ({ children }) => {
   );
 };
 
-const PatientDetailsDrawer: FC<{ patientId: string }> = ({ patientId: id }) => {
+type PatientDetailsProps = Pick<Patient, "id">;
+
+const PatientDetails: FC<PatientDetailsProps> = ({ id }) => {
   const patient = api.patient.byId.useQuery({ id });
 
   if (patient.isLoading) {
@@ -133,7 +136,7 @@ const Home: NextPage = () => {
             ))}
           </tbody>
         </table>
-        {openDrawer && <PatientDetailsDrawer patientId={"1"} />}
+        {openDrawer && <PatientDetails id={"1"} />}
       </AppContainer>
     </>
   );
