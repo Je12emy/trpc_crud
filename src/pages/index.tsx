@@ -1,8 +1,8 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
 import { AppContainer } from "../components/AppContainer";
 import { PatientDetails } from "../components/PatientDetails";
+import { usePatientDrawer } from "../hooks/usePatientDrawer";
 
 import { api } from "../utils/api";
 
@@ -18,7 +18,7 @@ const PatientPageHeader = () => {
 
 const Home: NextPage = () => {
   const patients = api.patient.all.useQuery({ page: 0, limit: 10 });
-  const [openDrawer, setOpenDrawer] = useState<boolean>(false);
+  const [drawer, openDrawer, closeDrawer] = usePatientDrawer();
 
   if (patients.isLoading) {
     return (
@@ -85,7 +85,7 @@ const Home: NextPage = () => {
                       Actions
                     </span>
                     <span
-                      onClick={() => setOpenDrawer(true)}
+                      onClick={() => openDrawer(patient)}
                       className="text-blue-400 underline hover:text-blue-600"
                     >
                       Edit
@@ -102,8 +102,11 @@ const Home: NextPage = () => {
             ))}
           </tbody>
         </table>
-        {openDrawer && (
-          <PatientDetails id={"1"} onClose={() => setOpenDrawer(false)} />
+        {drawer.shouldOpenDrawer && (
+          <PatientDetails
+            id={drawer.selectedPatient?.id as string}
+            onClose={closeDrawer}
+          />
         )}
       </AppContainer>
     </>
