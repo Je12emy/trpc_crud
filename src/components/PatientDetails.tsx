@@ -1,9 +1,11 @@
 import { FC } from "react";
 import { Patient } from "../types/Patient";
 import { api } from "../utils/api";
-import { Backdrop } from "./Backdrop";
-import { PatientDetailsForm } from "./PatientDetailsForm";
-import { SidePanel } from "./SidePanel";
+import { PatientForm } from "./PatientDetailsForm";
+import {
+  EmptySidePanel,
+  SidePanelWithBackDrop,
+} from "./SidePanel";
 import { Spinner } from "./Spinner";
 
 type Props = Pick<Patient, "id"> & {
@@ -15,11 +17,9 @@ export const PatientDetails: FC<Props> = ({ id, onClose: handleClose }) => {
 
   if (patient.isLoading) {
     return (
-      <Backdrop>
-        <SidePanel>
-          <Spinner />
-        </SidePanel>
-      </Backdrop>
+      <EmptySidePanel>
+        <Spinner />
+      </EmptySidePanel>
     );
   }
 
@@ -29,32 +29,11 @@ export const PatientDetails: FC<Props> = ({ id, onClose: handleClose }) => {
 
   return (
     <>
-      <Backdrop>
-        <SidePanel>
-          <div className="mt-4 flex flex-row items-center justify-center space-x-2">
-            <h2 className="text-center text-2xl font-bold">Patient Details</h2>
-            <button onClick={handleClose}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="h-6 w-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-          </div>
-          <div className="m-4">
-            <PatientDetailsForm {...patient.data} />
-          </div>
-        </SidePanel>
-      </Backdrop>
+      <SidePanelWithBackDrop title="Patient Details" onClose={handleClose}>
+        <div className="m-4">
+          <PatientDetailsForm {...patient.data} />
+        </div>
+      </SidePanelWithBackDrop>
     </>
   );
 };

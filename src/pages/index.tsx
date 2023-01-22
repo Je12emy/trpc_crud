@@ -1,7 +1,9 @@
 import { type NextPage } from "next";
 import Head from "next/head";
+import { FC } from "react";
 import { AppContainer } from "../components/AppContainer";
 import { Button } from "../components/Button";
+import { CreatePatient } from "../components/CreatePatient";
 import { PatientDetails } from "../components/PatientDetails";
 import { Spinner } from "../components/Spinner";
 import { usePatientDrawer } from "../hooks/usePatientDrawer";
@@ -20,7 +22,23 @@ const PatientPageHeader = () => {
 
 const Home: NextPage = () => {
   const patients = api.patient.all.useQuery({ page: 0, limit: 10 });
-  const [drawer, openDrawer, closeDrawer] = usePatientDrawer();
+  const [drawer, selectPatient, deselectPatient, openDrawer] =
+    usePatientDrawer();
+
+  const HomeSidePanel: FC = () => {
+    if (!drawer.shouldOpenDrawer) {
+      return null;
+    }
+    if (!drawer.selectedPatient) {
+      return <CreatePatient onClose={deselectPatient} />;
+    }
+    return (
+      <PatientDetails
+        id={drawer.selectedPatient?.id as string}
+        onClose={deselectPatient}
+      />
+    );
+  };
 
   if (patients.isLoading) {
     return <Spinner />;
@@ -83,7 +101,7 @@ const Home: NextPage = () => {
                       Actions
                     </span>
                     <span
-                      onClick={() => openDrawer(patient)}
+                      onClick={() => selectPatient(patient)}
                       className="text-blue-400 underline hover:text-blue-600"
                     >
                       Edit
@@ -100,14 +118,9 @@ const Home: NextPage = () => {
             ))}
           </tbody>
         </table>
-        {drawer.shouldOpenDrawer && (
-          <PatientDetails
-            id={drawer.selectedPatient?.id as string}
-            onClose={closeDrawer}
-          />
-        )}
+        <HomeSidePanel />
         <div className="w-11/12">
-          <Button> Add Patient </Button>
+          <Button onClick={openDrawer}> Add Patient </Button>
         </div>
       </AppContainer>
     </>

@@ -2,7 +2,7 @@ import { Reducer, useCallback, useReducer } from "react";
 import { Patient } from "../types/Patient";
 
 type DrawerReducerActions = {
-  type: "select" | "deselect";
+  type: "select" | "deselect" | "open";
   payload: Patient | null;
 };
 
@@ -20,6 +20,8 @@ export const DrawerReducer: Reducer<
       return { selectedPatient: action.payload, shouldOpenDrawer: true };
     case "deselect":
       return { selectedPatient: null, shouldOpenDrawer: false };
+    case "open":
+      return { selectedPatient: null, shouldOpenDrawer: true };
     default:
       return state;
   }
@@ -44,5 +46,9 @@ export const usePatientDrawer = () => {
     dispatch({ type: "deselect", payload: null });
   }, [dispatch]);
 
-  return [ state, selectPatient, deselectPatient ] as const;
+  const openDrawer = useCallback(() => {
+    dispatch({ type: "open", payload: null });
+  }, [dispatch]);
+
+  return [state, selectPatient, deselectPatient, openDrawer] as const;
 };
