@@ -2,10 +2,7 @@ import { FC } from "react";
 import { Patient } from "../types/Patient";
 import { api } from "../utils/api";
 import { PatientForm } from "./PatientDetailsForm";
-import {
-  EmptySidePanel,
-  SidePanelWithBackDrop,
-} from "./SidePanel";
+import { EmptySidePanel, SidePanelWithBackDrop } from "./SidePanel";
 import { Spinner } from "./Spinner";
 
 type Props = Pick<Patient, "id"> & {
@@ -31,7 +28,12 @@ export const PatientDetails: FC<Props> = ({ id, onClose: handleClose }) => {
     <>
       <SidePanelWithBackDrop title="Patient Details" onClose={handleClose}>
         <div className="m-4">
-          <PatientDetailsForm {...patient.data} />
+          <PatientForm
+            patient={patient.data}
+            onSubmit={(data) => {
+              console.log(data);
+            }}
+          />
         </div>
       </SidePanelWithBackDrop>
     </>
