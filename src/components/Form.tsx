@@ -11,16 +11,19 @@ export const TextField = () => {
   const { label, placeholder } = useDescription();
   return (
     <>
-      <label htmlFor={field.name}>
+      <label htmlFor={label}>
         <p className="pb-2 font-medium text-slate-700">{label}</p>
         <input
+          name={label}
           type="text"
           value={field.value ? field.value : ""}
           onChange={(e) => field.onChange(e.target.value)}
           className="w-full rounded-lg border border-slate-200 py-3 px-3 hover:shadow focus:border-slate-500 focus:outline-none"
           placeholder={placeholder}
         />
-        {error?.errorMessage && <span>{error?.errorMessage}</span>}
+        {error?.errorMessage && (
+          <span className="text-red-600">{error?.errorMessage}</span>
+        )}
       </label>
     </>
   );
@@ -32,14 +35,21 @@ type SubmitButtonProps = DetailedHTMLProps<
 >;
 
 export const SubmitButton: FC<SubmitButtonProps> = ({ ...props }) => {
-  const { formState } = useForm<z.infer<typeof PatientFormSchema>>();
+  // Dirty is not updating, maybe file a bug report
+  // const { formState } = useForm<z.infer<typeof PatientFormSchema>>();
 
-  return <button type="submit" className={BaseButtonStyles} {...props} />;
+  return (
+    <button
+      type="submit"
+      className={BaseButtonStyles}
+      {...props}
+    />
+  );
 };
 
 export const Dropdown: FC<{ options: string[] }> = ({ options }) => {
   const { field, error } = useTsController<BloodType>();
-  const { label, placeholder } = useDescription();
+  const { label } = useDescription();
 
   return (
     <>
@@ -57,6 +67,9 @@ export const Dropdown: FC<{ options: string[] }> = ({ options }) => {
             </option>
           ))}
         </select>
+        {error?.errorMessage && (
+          <span className="text-red-600">{error?.errorMessage}</span>
+        )}
       </label>
     </>
   );
