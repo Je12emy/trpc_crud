@@ -16,7 +16,7 @@ const PatientPageHeader = () => {
 
 const AppContainer: FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-slate-800">
+    <main className="flex min-h-screen flex-col items-center justify-center bg-gray-50">
       {children}
     </main>
   );
@@ -45,6 +45,7 @@ const Home: NextPage = () => {
     <>
       <PatientPageHeader />
       <AppContainer>
+        <h1 className="mb-4 text-3xl font-bold">Patient List</h1>
         <table className="w-11/12 border-collapse">
           <thead>
             <tr>
