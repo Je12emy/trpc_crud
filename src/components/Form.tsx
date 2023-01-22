@@ -1,7 +1,7 @@
 import { useDescription, useTsController } from "@ts-react/form";
 import { ButtonHTMLAttributes, DetailedHTMLProps, FC } from "react";
 import { z } from "zod";
-import { EditPatientDetailsSchema } from "./PatientDetailsForm";
+import { PatientFormSchema } from "./PatientDetailsForm";
 import { useForm } from "react-hook-form";
 import { BloodType } from "../types/Patient";
 import { BaseButtonStyles } from "./Button";
@@ -32,7 +32,7 @@ type SubmitButtonProps = DetailedHTMLProps<
 >;
 
 export const SubmitButton: FC<SubmitButtonProps> = ({ ...props }) => {
-  const { formState } = useForm<z.infer<typeof EditPatientDetailsSchema>>();
+  const { formState } = useForm<z.infer<typeof PatientFormSchema>>();
 
   return <button type="submit" className={BaseButtonStyles} {...props} />;
 };

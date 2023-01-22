@@ -1,12 +1,14 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { AppContainer } from "../components/AppContainer";
 import { Button } from "../components/Button";
 import { ConfirmationModal } from "../components/ConfirmationModal";
 import { CreatePatient } from "../components/CreatePatient";
+import { DeletePatient } from "../components/DeletePatient";
 import { PatientDetails } from "../components/PatientDetails";
 import { Spinner } from "../components/Spinner";
+import { usePatientDeleteModal } from "../hooks/useModal";
 import { usePatientDrawer } from "../hooks/usePatientDrawer";
 
 import { api } from "../utils/api";
@@ -25,8 +27,7 @@ const Home: NextPage = () => {
   const patients = api.patient.all.useQuery({ page: 0, limit: 10 });
   const [drawer, selectPatient, deselectPatient, openDrawer] =
     usePatientDrawer();
-  const [showConfirmationDialog, setShowConfirmationDialog] =
-    useState<boolean>(false);
+  const [modal, openModal, closeModal] = usePatientDeleteModal();
 
   const HomeSidePanel: FC = () => {
     if (!drawer.shouldOpenDrawer) {
@@ -41,6 +42,18 @@ const Home: NextPage = () => {
         onClose={deselectPatient}
       />
     );
+  };
+
+  const DeleteModal: FC = () => {
+    if (!modal.isOpen) {
+      return null;
+    }
+
+    if (!modal.selectedPatient) {
+      return null;
+    }
+
+    return <DeletePatient id={modal.selectedPatient.id} onClose={closeModal} />;
   };
 
   if (patients.isLoading) {
@@ -110,7 +123,7 @@ const Home: NextPage = () => {
                       Edit
                     </span>
                     <span
-                      onClick={() => setShowConfirmationDialog(true)}
+                      onClick={() => openModal(patient)}
                       className="pl-6 text-blue-400 underline hover:text-blue-600"
                     >
                       Remove
@@ -122,10 +135,7 @@ const Home: NextPage = () => {
           </tbody>
         </table>
         <HomeSidePanel />
-        <ConfirmationModal
-          message="Are you sure you wan't to delete this patient?"
-          handleConfirmation={() => {}}
-        />
+        <DeleteModal />
         <div className="w-11/12">
           <Button onClick={openDrawer}> Add Patient </Button>
         </div>

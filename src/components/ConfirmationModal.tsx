@@ -4,10 +4,12 @@ import { Backdrop } from "./Backdrop";
 type Props = {
   message: string;
   handleConfirmation: () => void;
+  onClose: () => void;
 };
 
 export const ConfirmationModal: FC<Props> = ({
   handleConfirmation,
+  onClose: handleClose,
   message,
 }) => {
   return (
@@ -24,7 +26,10 @@ export const ConfirmationModal: FC<Props> = ({
             >
               Confirm
             </button>
-            <button className="text-md ml-2 rounded-md bg-indigo-500 px-7 py-2  text-white">
+            <button
+              onClick={handleClose}
+              className="text-md ml-2 rounded-md bg-indigo-500 px-7 py-2  text-white"
+            >
               Cancel
             </button>
           </div>
