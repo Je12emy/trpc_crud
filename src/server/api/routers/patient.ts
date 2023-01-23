@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { bloodTypeSchema } from "../../../types/Patient";
 
 import { createTRPCRouter, publicProcedure } from "../trpc";
 
@@ -34,5 +35,40 @@ export const patientRouter = createTRPCRouter({
     .input(z.object({ id: z.string() }))
     .query(async ({ input, ctx }) => {
       return ctx.prisma.patient.findUnique({ where: { id: input.id } });
+    }),
+  create: publicProcedure
+    .input(
+      z.object({
+        firstName: z.string().min(1),
+        lastName: z.string().min(1),
+        bloodType: bloodTypeSchema,
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return ctx.prisma.patient.create({
+        data: input,
+      });
+    }),
+  deleteById: publicProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      return ctx.prisma.patient.delete({
+        where: { id: input.id },
+      });
+    }),
+  update: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        firstName: z.string().min(1),
+        lastName: z.string().min(1),
+        bloodType: bloodTypeSchema,
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return ctx.prisma.patient.update({
+        where: { id: input.id },
+        data: input,
+      });
     }),
 });

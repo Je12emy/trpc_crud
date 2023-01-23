@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { Patient } from "../types/Patient";
 import { api } from "../utils/api";
 import { PatientForm } from "./PatientDetailsForm";
@@ -10,8 +10,15 @@ type Props = Pick<Patient, "id"> & {
 };
 
 export const PatientDetails: FC<Props> = ({ id, onClose: handleClose }) => {
+  const utils = api.useContext();
   const patient = api.patient.byId.useQuery({ id });
   // TODO add update function
+  const editPatientMutation = api.patient.update.useMutation({
+    onSuccess: () => {
+      utils.patient.all.invalidate();
+      handleClose();
+    },
+  });
 
   if (patient.isLoading) {
     return (
@@ -32,7 +39,12 @@ export const PatientDetails: FC<Props> = ({ id, onClose: handleClose }) => {
           <PatientForm
             patient={patient.data}
             onSubmit={(data) => {
-              console.log(data);
+              editPatientMutation.mutate({
+                id,
+                lastName: data.lastName,
+                firstName: data.firstName,
+                bloodType: data.bloodType,
+              });
             }}
           />
         </div>
