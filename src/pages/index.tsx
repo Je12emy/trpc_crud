@@ -1,6 +1,6 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import { FC } from "react";
+import { FC, Fragment } from "react";
 import { AppContainer } from "../components/AppContainer";
 import { Button } from "../components/Button";
 import { CreatePatient } from "../components/CreatePatient";
@@ -23,7 +23,13 @@ const PatientPageHeader = () => {
 };
 
 const Home: NextPage = () => {
-  const patients = api.patient.all.useQuery({ page: 0, limit: 10 });
+  const patients = api.patient.all.useInfiniteQuery(
+    { limit: 5 },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
+
   const [drawer, selectPatient, deselectPatient, openDrawer] =
     usePatientDrawer();
   const [modal, openModal, closeModal] = usePatientDeleteModal();
@@ -90,50 +96,63 @@ const Home: NextPage = () => {
             </tr>
           </thead>
           <tbody>
-            {patients.data.map((patient) => (
-              <>
-                <tr className="lg:flex-no-wrap mb-10 flex flex-row flex-wrap bg-white lg:mb-0 lg:table-row lg:flex-row lg:hover:bg-gray-100">
-                  <td className="relative block w-full border border-b p-3 text-center text-gray-800 lg:static lg:table-cell lg:w-auto">
-                    <span className="absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase lg:hidden">
-                      First Name
-                    </span>
-                    {patient.firstName}
-                  </td>
-                  <td className="relative block w-full border border-b p-3 text-center text-gray-800 lg:static lg:table-cell lg:w-auto">
-                    <span className="absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase lg:hidden">
-                      Last Name
-                    </span>
-                    {patient.lastName}
-                  </td>
-                  <td className="relative block w-full border border-b p-3 text-center text-gray-800 lg:static lg:table-cell lg:w-auto">
-                    <span className="absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase lg:hidden">
-                      Blood Type
-                    </span>
-                    {patient.bloodType}
-                  </td>
-                  <td className="relative block w-full border border-b p-3 text-center text-gray-800 lg:static lg:table-cell lg:w-auto">
-                    <span className="absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase lg:hidden">
-                      Actions
-                    </span>
-                    <span
-                      onClick={() => selectPatient(patient)}
-                      className="text-blue-400 underline hover:text-blue-600"
-                    >
-                      Edit
-                    </span>
-                    <span
-                      onClick={() => openModal(patient)}
-                      className="pl-6 text-blue-400 underline hover:text-blue-600"
-                    >
-                      Remove
-                    </span>
-                  </td>
-                </tr>
-              </>
+            {patients.data.pages.map((group, i) => (
+              <Fragment key={i}>
+                {group.patients.map((patient) => (
+                  <>
+                    <tr className="lg:flex-no-wrap mb-10 flex flex-row flex-wrap bg-white lg:mb-0 lg:table-row lg:flex-row lg:hover:bg-gray-100">
+                      <td className="relative block w-full border border-b p-3 text-center text-gray-800 lg:static lg:table-cell lg:w-auto">
+                        <span className="absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase lg:hidden">
+                          First Name
+                        </span>
+                        {patient.firstName}
+                      </td>
+                      <td className="relative block w-full border border-b p-3 text-center text-gray-800 lg:static lg:table-cell lg:w-auto">
+                        <span className="absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase lg:hidden">
+                          Last Name
+                        </span>
+                        {patient.lastName}
+                      </td>
+                      <td className="relative block w-full border border-b p-3 text-center text-gray-800 lg:static lg:table-cell lg:w-auto">
+                        <span className="absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase lg:hidden">
+                          Blood Type
+                        </span>
+                        {patient.bloodType}
+                      </td>
+                      <td className="relative block w-full border border-b p-3 text-center text-gray-800 lg:static lg:table-cell lg:w-auto">
+                        <span className="absolute top-0 left-0 bg-blue-200 px-2 py-1 text-xs font-bold uppercase lg:hidden">
+                          Actions
+                        </span>
+                        <span
+                          onClick={() => selectPatient(patient)}
+                          className="text-blue-400 underline hover:text-blue-600"
+                        >
+                          Edit
+                        </span>
+                        <span
+                          onClick={() => openModal(patient)}
+                          className="pl-6 text-blue-400 underline hover:text-blue-600"
+                        >
+                          Remove
+                        </span>
+                      </td>
+                    </tr>
+                  </>
+                ))}
+              </Fragment>
             ))}
           </tbody>
         </table>
-        <div className="sticky bottom-0 w-11/12 mb-2 bg-gray-50 py-2">
+        <div className="mb-2 w-11/12 flex flex-col items-center">
+          <button
+            className="mx-auto rounded-l bg-gray-300 py-2 px-4 text-sm font-semibold text-gray-800 hover:bg-gray-400"
+            disabled={!patients.hasNextPage}
+            onClick={() => patients.fetchNextPage()}
+          >
+            {patients.hasNextPage ? "Load More" : "Nothing more to load"}
+          </button>
+        </div>
+        <div className="sticky bottom-0 mb-2 w-11/12 bg-gray-50 py-2">
           <Button onClick={openDrawer}> Add Patient </Button>
         </div>
         <HomeSidePanel />
