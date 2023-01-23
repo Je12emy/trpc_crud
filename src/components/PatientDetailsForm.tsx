@@ -1,11 +1,11 @@
 import { createTsForm, createUniqueFieldSchema } from "@ts-react/form";
 import { FC } from "react";
 import { z } from "zod";
-import { Patient } from "../types/Patient";
+import { bloodTypeSchema, Patient } from "../types/Patient";
 import { TextField, SubmitButton, Dropdown } from "./Form";
 
 const bloodTypeDropdownSchema = createUniqueFieldSchema(
-  z.string().min(1).describe("Blood Type // A"),
+  bloodTypeSchema.describe("Blood Type // A"),
   "dropDown"
 );
 

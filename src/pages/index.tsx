@@ -133,7 +133,7 @@ const Home: NextPage = () => {
             ))}
           </tbody>
         </table>
-        <div className="w-11/12">
+        <div className="sticky bottom-0 w-11/12 mb-2 bg-gray-50 py-2">
           <Button onClick={openDrawer}> Add Patient </Button>
         </div>
         <HomeSidePanel />
