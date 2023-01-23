@@ -1,8 +1,5 @@
 import { useDescription, useTsController } from "@ts-react/form";
 import { ButtonHTMLAttributes, DetailedHTMLProps, FC } from "react";
-import { z } from "zod";
-import { PatientFormSchema } from "./PatientDetailsForm";
-import { useForm } from "react-hook-form";
 import { BloodType } from "../types/Patient";
 import { BaseButtonStyles } from "./Button";
 
